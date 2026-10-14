@@ -18,11 +18,12 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
+// (First version, kept for reference — the app now runs from index.mjs.)
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  database: "insta_post",
-  password: "abhay_942",
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  database: process.env.DB_NAME || "insta_post",
+  password: process.env.DB_PASSWORD || "",
 });
 
 const storage = multer.diskStorage({
@@ -43,8 +44,8 @@ const upload = multer({ storage: storage });
 // Imgur API endpoint
 const IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
 
-// Imgur API credentials (replace with your actual credentials)
-const IMGUR_CLIENT_ID = "e1b5901774bce4d";
+// Imgur API credentials come from the environment (see .env.example)
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID || "";
 
 let posts = [
   {

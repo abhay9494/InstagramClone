@@ -4,50 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="/style.css" />
+    <title>Instagram — Posts</title>
 </head>
 
 <body>
     <header>
-        <img src="https://static.vecteezy.com/system/resources/previews/018/930/473/original/instagram-logo-instagram-icon-transparent-free-png.png"
-            alt="Insta Logo">
+        <img src="/logo.svg" alt="Insta Logo">
         <h1 id="insta_name">Instagram</h1>
     </header>
 
     <main>
+        <div class="toolbar">
+            <span class="count"><%= total %> posts</span>
+            <a href="/posts/new" id="addPost">Write a new post</a>
+        </div>
+
+        <% if (!results.length) { %>
+            <p class="empty">No posts yet. Write the first one, or run <code>npm run seed</code> to add 500 sample posts.</p>
+        <% } %>
+
         <div class="container">
-            <% for(let i=0; i<results.length; i++) { %>
+            <% for (const post of results) { %>
                 <div class="post">
-                    <p class="profile_pic"><img
-                            src="https://i.pinimg.com/564x/8a/01/cc/8a01cc0579be056ecc8dfa2f07bd42aa.jpg" alt=""></p>
-                    <div class="user_info">
-                        <p class="username">
-                            <%=results[i].username%>
-                        </p>
-                        <p class="name">
-                            <%=results[i].name%>
-                        </p>
+                    <div class="post_head">
+                        <img class="profile_pic" src="https://i.pinimg.com/564x/8a/01/cc/8a01cc0579be056ecc8dfa2f07bd42aa.jpg" alt="">
+                        <div class="user_info">
+                            <p class="username"><%= post.username %></p>
+                            <p class="name"><%= post.name %></p>
+                        </div>
                     </div>
 
-                    <div class="image" style="background-image: url('<%=results[i].image%>');"></div>
-                    <p class="comment">
-                        <%=results[i].comment%>
-                    </p>
+                    <a href="/posts/<%= post.id %>" class="image" style="background-image: url('<%= post.image %>');" aria-label="Open the post"></a>
+                    <p class="comment"><%= post.comment %></p>
                     <div id="buttons">
-                        <a href="/posts/<%= results[i].id %>/edit" id="edit_button">Edit Post</a>
-                        <form method="post" action="/posts/<%=results[i].id%>?_method=DELETE">
+                        <a href="/posts/<%= post.id %>/edit" id="edit_button">Edit Post</a>
+                        <form method="post" action="/posts/<%= post.id %>?_method=DELETE">
                             <button id="delete_btn">Delete Post</button>
                         </form>
                     </div>
-
                 </div>
-                <%}%>
-                    <div class="post new_post">
-                        <!-- <a href=""></a> -->
-                        <a href="/posts/new" id="addPost">Write a new post</a>
-                    </div>
+            <% } %>
         </div>
+
+        <% if (pages > 1) { %>
+            <nav class="pages">
+                <% if (page > 1) { %><a href="/?page=<%= page - 1 %>">‹ Newer</a><% } %>
+                <span>Page <%= page %> of <%= pages %></span>
+                <% if (page < pages) { %><a href="/?page=<%= page + 1 %>">Older ›</a><% } %>
+            </nav>
+        <% } %>
     </main>
 
 </body>

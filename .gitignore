@@ -1,2 +1,4 @@
 node_modules/
 .git/
+# Your passwords and keys (see .env.example)
+.env
