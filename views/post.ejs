@@ -1,0 +1,11 @@
+<%- include("partials/top", { pageClass: "page-post" }) %>
+<%- include("partials/post-detail") %>
+<% if (more.length) { %>
+  <section class="more-from">
+    <h2 class="muted">More posts from <a href="/<%= post.user.username %>" class="username"><%= post.user.username %></a></h2>
+    <div class="grid grid-profile">
+      <% for (const p of more) { %><%- include("partials/tile", { post: p }) %><% } %>
+    </div>
+  </section>
+<% } %>
+<%- include("partials/bottom") %>

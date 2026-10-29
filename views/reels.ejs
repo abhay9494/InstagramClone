@@ -1,0 +1,14 @@
+<%- include("partials/top", { pageClass: "page-reels" }) %>
+<h1 class="sr">Reels</h1>
+<div class="reels" data-reels>
+  <% if (!reels.length) { %>
+    <div class="empty">
+      <span class="empty-icon"><%- icon("reels", { size: 40 }) %></span>
+      <h2>No reels yet</h2>
+      <p class="muted">Share a short video and it will show up here.</p>
+      <a href="/create?kind=reel" class="strong-link">Make a reel</a>
+    </div>
+  <% } %>
+  <%- include("partials/reel-items") %>
+</div>
+<%- include("partials/bottom") %>

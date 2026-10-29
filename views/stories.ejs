@@ -1,0 +1,28 @@
+<%- include("partials/head", { bodyClass: "stories-page" }) %>
+<main id="main" class="story-stage" data-stories data-viewer="<%= me ? '1' : '' %>" data-start="<%= start %>" data-prev-user="<%= prev ? `/stories/${prev}` : '' %>" data-next-user="<%= next ? `/stories/${next}` : '' %>" data-exit="<%= me ? '/' : `/${user.username}` %>">
+  <a href="/" class="wordmark story-brand">Instagram</a>
+  <a href="<%= me ? '/' : `/${user.username}` %>" class="story-close" aria-label="Close stories"><%- icon("close", { size: 30 }) %></a>
+  <button class="story-arrow back" type="button" data-story-back aria-label="Previous"><%- icon("back", { size: 18 }) %></button>
+  <div class="story">
+    <div class="story-bars" aria-hidden="true">
+      <% stories.forEach((s, i) => { %><span class="bar<%= i < start ? ' done' : '' %>"><i></i></span><% }) %>
+    </div>
+    <header class="story-head">
+      <a href="/<%= user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(user) %>" width="32" height="32" alt=""></a>
+      <div class="story-who">
+        <p><a class="username" href="/<%= user.username %>"><%= user.username %></a> <time data-story-time><%= ago(stories[start].created_at) %></time></p>
+        <p class="story-music" data-story-music hidden><%- icon("music", { size: 11 }) %><span></span></p>
+      </div>
+      <button class="story-sound" type="button" data-story-sound aria-label="Sound on or off" hidden><%- icon("sound-off", { size: 20 }) %><%- icon("sound-on", { size: 20 }) %></button>
+      <button class="story-pause" type="button" data-story-pause aria-label="Pause"><%- icon("pause", { size: 20 }) %><%- icon("play", { size: 20 }) %></button>
+    </header>
+    <% stories.forEach((s, i) => { const track = trackOf(s.music); %>
+      <img class="slide<%= i === start ? ' on' : '' %>" src="<%= s.image %>" alt="Story by <%= user.username %>, <%= ago(s.created_at) %> ago" data-id="<%= s.id %>" data-time="<%= ago(s.created_at) %>"<% if (track) { %> data-music="<%= trackUrl(track) %>" data-music-title="<%= track.title %> · <%= track.artist %>"<% } %> decoding="async">
+    <% }) %>
+    <button class="story-zone back" type="button" data-story-back tabindex="-1" aria-hidden="true"></button>
+    <button class="story-zone next" type="button" data-story-next tabindex="-1" aria-hidden="true"></button>
+  </div>
+  <button class="story-arrow next" type="button" data-story-next aria-label="Next"><%- icon("next", { size: 18 }) %></button>
+  <noscript><p class="story-noscript"><% if (next) { %><a href="/stories/<%= next %>">Next: <%= next %>'s story</a><% } else { %><a href="/">Back to your feed</a><% } %></p></noscript>
+</main>
+<%- include("partials/end") %>

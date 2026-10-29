@@ -1,0 +1,78 @@
+<%- include("partials/top", { pageClass: "page-profile" }) %>
+<div class="profile">
+  <header class="ph">
+    <div class="ph-photo">
+      <% if (story) { %>
+        <a href="/stories/<%= user.username %>" class="ring big<%= story === 'seen' ? ' seen' : '' %>" aria-label="Watch <%= user.username %>'s story"><img class="avatar" src="<%= avatarOf(user) %>" width="150" height="150" alt=""></a>
+      <% } else { %>
+        <span class="ring big none"><img class="avatar" src="<%= avatarOf(user) %>" width="150" height="150" alt="<%= user.username %>'s profile photo"></span>
+      <% } %>
+    </div>
+    <section class="ph-info">
+      <div class="ph-top">
+        <h1 class="ph-username"><%= user.username %></h1>
+        <div class="ph-actions">
+          <% if (own) { %>
+            <a class="btn btn-secondary" href="/accounts/edit">Edit profile</a>
+            <a class="btn btn-secondary" href="/<%= user.username %>/saved">Saved</a>
+            <a class="act" href="/accounts/edit" aria-label="Settings"><%- icon("settings") %></a>
+          <% } else if (me) { %>
+            <%- include("partials/follow-button", { user, following, variant: "btn", followBack: followsYou }) %>
+            <button class="btn btn-secondary" type="button" data-share="/<%= user.username %>">Share profile</button>
+          <% } else { %>
+            <a class="btn" href="/login?next=/<%= user.username %>">Follow</a>
+          <% } %>
+        </div>
+      </div>
+      <ul class="ph-stats">
+        <li><span class="strong"><%= compact(counts.posts) %></span> <%= counts.posts === 1 ? "post" : "posts" %></li>
+        <li><a href="/<%= user.username %>/followers"><span class="strong" data-followers><%= compact(counts.followers) %></span> <%= counts.followers === 1 ? "follower" : "followers" %></a></li>
+        <li><a href="/<%= user.username %>/following"><span class="strong"><%= compact(counts.following) %></span> following</a></li>
+      </ul>
+      <div class="ph-bio">
+        <% if (user.name) { %><p class="strong"><%= user.name %></p><% } %>
+        <% if (user.bio) { %><p class="ph-text"><%- rich(user.bio) %></p><% } %>
+        <% if (followsYou) { %><p class="muted small">Follows you</p><% } %>
+        <% if (mutuals.total) { %>
+          <p class="ph-mutual muted small">Followed by
+            <% mutuals.names.forEach((name, i) => { %><a href="/<%= name %>" class="username"><%= name %></a><%= i < mutuals.names.length - 1 ? ", " : "" %><% }) %><%= mutuals.total > mutuals.names.length ? ` + ${count(mutuals.total - mutuals.names.length)} more` : "" %>
+          </p>
+        <% } %>
+      </div>
+    </section>
+  </header>
+
+  <nav class="tabs" aria-label="Profile">
+    <% for (const [t, label, ic, href] of [["posts", "Posts", "grid", ""], ["reels", "Reels", "reels", "/reels"], ["reposts", "Reposts", "repost", "/reposts"], ...(own ? [["saved", "Saved", "save", "/saved"]] : [])]) { %>
+      <a href="/<%= user.username %><%= href %>" class="tab<%= tab === t ? ' on' : '' %>"<%- tab === t ? ' aria-current="page"' : '' %>><%- icon(ic, { size: 12 }) %><%= label %></a>
+    <% } %>
+  </nav>
+
+  <% if (!posts.length) { %>
+    <div class="empty">
+      <% if (tab === "saved") { %>
+        <span class="empty-icon"><%- icon("save", { size: 40 }) %></span>
+        <h2>Save</h2>
+        <p class="muted">Save photos and reels you want to see again. No one is notified, and only you can see what you've saved.</p>
+      <% } else if (tab === "reels") { %>
+        <span class="empty-icon"><%- icon("reels", { size: 40 }) %></span>
+        <h2><%= own ? "Share a moment with the world" : "No reels yet" %></h2>
+        <% if (own) { %><a href="/create?kind=reel" class="strong-link">Create your first reel</a><% } %>
+      <% } else if (tab === "reposts") { %>
+        <span class="empty-icon"><%- icon("repost", { size: 40 }) %></span>
+        <h2>No reposts yet</h2>
+        <p class="muted"><%= own ? "Posts and reels you repost show up here and in your followers' feeds." : `When ${user.username} reposts something, it will show up here.` %></p>
+      <% } else if (own) { %>
+        <span class="empty-icon"><%- icon("photo", { size: 40 }) %></span>
+        <h2>Share photos</h2>
+        <p class="muted">When you share photos, they'll appear on your profile.</p>
+        <a href="/create" class="strong-link">Share your first photo</a>
+      <% } else { %>
+        <span class="empty-icon"><%- icon("photo", { size: 40 }) %></span>
+        <h2>No posts yet</h2>
+      <% } %>
+    </div>
+  <% } %>
+  <%- include("partials/grid-items") %>
+</div>
+<%- include("partials/bottom") %>

@@ -1,0 +1,53 @@
+<article class="post-detail" data-aspect="<%= post.aspect %>" data-post="<%= post.id %>">
+  <div class="pd-media">
+    <%- include("media", { post, aspect: post.aspect, eager: true }) %>
+  </div>
+  <div class="pd-side">
+    <header class="post-head pd-head">
+      <a href="/<%= post.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(post.user) %>" width="32" height="32" alt=""></a>
+      <div class="who">
+        <div class="who-line">
+          <a href="/<%= post.user.username %>" class="username"><%= post.user.username %></a>
+          <% if (me && me.id !== post.user.id && !following) { %>
+            <span class="muted" aria-hidden="true">•</span>
+            <%- include("follow-button", { user: post.user, following: false, variant: "link" }) %>
+          <% } %>
+        </div>
+        <%- include("music-line", { post }) %>
+      </div>
+      <%- include("post-menu", { post }) %>
+    </header>
+    <div class="pd-comments" data-comments>
+      <% if (post.caption) { %>
+        <div class="comment caption-row">
+          <a href="/<%= post.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(post.user) %>" width="32" height="32" alt=""></a>
+          <div class="comment-body">
+            <p><a class="username" href="/<%= post.user.username %>"><%= post.user.username %></a> <%- rich(post.caption) %></p>
+            <div class="comment-meta muted"><time datetime="<%= post.created_at.toISOString() %>"><%= ago(post.created_at) %></time></div>
+          </div>
+        </div>
+      <% } %>
+      <% for (const comment of comments) { %><%- include("comment", { comment }) %><% } %>
+      <% if (!comments.length) { %>
+        <div class="pd-empty" data-no-comments>
+          <h3>No comments yet.</h3>
+          <p class="muted">Start the conversation.</p>
+        </div>
+      <% } %>
+    </div>
+    <div class="pd-foot">
+      <%- include("actions", { post }) %>
+      <p class="likes">
+        <span class="strong" data-like-count><%= plural(post.like_count, "like") %></span><% if (post.repost_count) { %>
+        <span class="muted"> · </span><span class="strong" data-repost-count><%= plural(post.repost_count, "repost") %></span><% } %><% if (post.kind === "reel") { %>
+        <span class="muted"> · <%= plural(post.views, "play") %></span><% } %>
+      </p>
+      <a href="/p/<%= post.id %>" class="pd-time muted"><time datetime="<%= post.created_at.toISOString() %>" title="<%= fullDate(post.created_at) %>"><%= agoLong(post.created_at) %></time></a>
+      <% if (me) { %>
+        <%- include("comment-form", { post }) %>
+      <% } else { %>
+        <p class="pd-login"><a href="/login?next=/p/<%= post.id %>" class="strong-link">Log in</a> to like or comment.</p>
+      <% } %>
+    </div>
+  </div>
+</article>

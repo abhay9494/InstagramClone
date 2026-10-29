@@ -1,0 +1,23 @@
+<div class="share-sheet" data-share-post="<%= post.id %>">
+  <header class="share-head">
+    <h2>Share</h2>
+    <a href="/p/<%= post.id %>" class="act" data-close-share aria-label="Close"><%- icon("close") %></a>
+  </header>
+  <input type="search" class="share-filter" placeholder="Search" aria-label="Search people" autocomplete="off" data-share-filter>
+  <ul class="share-list">
+    <% for (const u of people) { %>
+      <li class="person" data-name="<%= `${u.username} ${u.name}`.toLowerCase() %>">
+        <img class="avatar" src="<%= avatarOf(u) %>" width="44" height="44" alt="">
+        <span class="who"><span class="username"><%= u.username %></span><span class="muted"><%= u.name %></span></span>
+        <form method="post" action="/p/<%= post.id %>/share" class="inline" data-share-send>
+          <input type="hidden" name="to" value="<%= u.username %>">
+          <button class="btn">Send</button>
+        </form>
+      </li>
+    <% } %>
+  </ul>
+  <% if (!people.length) { %><p class="muted center share-none">Follow people to send them posts.</p><% } %>
+  <div class="share-foot">
+    <button type="button" class="btn btn-secondary btn-block" data-copy="/p/<%= post.id %>"><%- icon("link", { size: 18 }) %>Copy link</button>
+  </div>
+</div>

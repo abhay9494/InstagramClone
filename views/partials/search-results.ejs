@@ -1,0 +1,14 @@
+<% if (tag) { %>
+  <a class="result" href="/explore/tags/<%= encodeURIComponent(tag) %>">
+    <span class="result-tag" aria-hidden="true">#</span>
+    <span class="who"><span class="username">#<%= tag %></span><span class="muted"><%= plural(tagTotal, "post") %></span></span>
+  </a>
+<% } %>
+<% for (const u of users) { %>
+  <a class="result" href="/<%= u.username %>">
+    <img class="avatar" src="<%= avatarOf(u) %>" width="44" height="44" alt="">
+    <span class="who"><span class="username"><%= u.username %></span><span class="muted"><%= u.name %></span></span>
+  </a>
+<% } %>
+<% if (q && !tag && !users.length) { %><p class="muted center">No results found for “<%= q %>”.</p><% } %>
+<% if (!q) { %><p class="muted center">Search for people or #hashtags.</p><% } %>

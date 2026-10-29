@@ -1,0 +1,11 @@
+<%- include("partials/top", { pageClass: "page-search" }) %>
+<div class="narrow">
+  <h1 class="page-title">Search</h1>
+  <form action="/search" role="search" class="search-form" data-live-search>
+    <input type="search" name="q" value="<%= q %>" placeholder="Search" aria-label="Search people and hashtags" autocomplete="off" autofocus>
+  </form>
+  <div class="search-results" data-search-results>
+    <%- include("partials/search-results") %>
+  </div>
+</div>
+<%- include("partials/bottom") %>

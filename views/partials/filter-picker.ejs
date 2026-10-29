@@ -1,0 +1,9 @@
+<div class="filters" role="radiogroup" aria-label="Filter">
+  <% for (const f of FILTERS) { %>
+    <label class="filter">
+      <input type="radio" name="filter" value="<%= f.id %>"<%= f.id === selected ? " checked" : "" %>>
+      <span class="filter-thumb"><img src="<%= image || '/filter-sample.svg' %>" alt="" class="f-<%= f.id %>" data-filter-thumb></span>
+      <span class="filter-name"><%= f.name %></span>
+    </label>
+  <% } %>
+</div>

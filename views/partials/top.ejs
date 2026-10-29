@@ -1,0 +1,46 @@
+<%- include('head') %>
+<%
+  // One navigation link: highlighted (bold, filled icon) on its own page.
+  const nav = (name, href, iconName, label, extra = "", badge = 0) => {
+    const on = active === name;
+    const dot = badge ? `<span class="badge" data-unread-badge>${badge > 9 ? "9+" : badge}</span>` : name === "direct" ? '<span class="badge" data-unread-badge hidden></span>' : "";
+    return `<a href="${href}" class="nav-link${on ? " on" : ""}"${on ? ' aria-current="page"' : ""} ${extra}><span class="nav-icon">${icon(on && iconName !== "search" ? `${iconName}-on` : iconName)}${dot}</span><span>${label}</span></a>`;
+  };
+%>
+<% if (me) { %>
+<nav class="sidebar" aria-label="Main">
+  <a href="/" class="brand" aria-label="Instagram home"><span class="wordmark">Instagram</span><span class="glyph"><%- icon("glyph") %></span></a>
+  <ul class="nav-list">
+    <li><%- nav("home", "/", "home", "Home") %></li>
+    <li><%- nav("search", "/search", "search", "Search", 'data-panel="search"') %></li>
+    <li><%- nav("explore", "/explore", "explore", "Explore") %></li>
+    <li><%- nav("reels", "/reels", "reels", "Reels") %></li>
+    <li><%- nav("direct", "/direct/inbox", "direct", "Messages", "", unread) %></li>
+    <li><%- nav("activity", "/activity", "heart", "Notifications") %></li>
+    <li><%- nav("create", "/create", "create", "Create") %></li>
+    <li>
+      <a href="/<%= me.username %>" data-me class="nav-link<%= active === 'profile' ? ' on' : '' %>"<%- active === 'profile' ? ' aria-current="page"' : '' %>>
+        <img class="avatar nav-avatar" src="<%= avatarOf(me) %>" width="24" height="24" alt=""><span>Profile</span>
+      </a>
+    </li>
+  </ul>
+  <%- include('more-menu') %>
+</nav>
+<header class="topbar">
+  <a href="/" class="wordmark" aria-label="Instagram home">Instagram</a>
+  <form class="topbar-search" action="/search" role="search">
+    <input type="search" name="q" placeholder="Search" aria-label="Search" autocomplete="off">
+  </form>
+  <a href="/activity" class="act" aria-label="Notifications"><%- icon(active === "activity" ? "heart-on" : "heart") %></a>
+  <a href="/direct/inbox" class="act nav-icon" aria-label="Messages"><%- icon(active === "direct" ? "direct-on" : "direct") %><span class="badge" data-unread-badge<%= unread ? '' : ' hidden' %>><%= unread > 9 ? "9+" : unread || "" %></span></a>
+</header>
+<% } else { %>
+<header class="guestbar">
+  <a href="/login" class="wordmark" aria-label="Instagram">Instagram</a>
+  <div class="guest-actions">
+    <a class="btn" href="/login?next=<%= encodeURIComponent(path) %>">Log in</a>
+    <a class="link-btn" href="/signup">Sign up</a>
+  </div>
+</header>
+<% } %>
+<main id="main" class="page <%= locals.pageClass || '' %>">

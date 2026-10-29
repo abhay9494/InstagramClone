@@ -1,0 +1,18 @@
+<div class="msg<%= m.mine ? ' mine' : '' %>" data-message="<%= m.id %>" title="<%= clock(m.created_at) %>">
+  <% if (!m.mine) { %><a href="/<%= other.username %>" class="msg-avatar" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(other) %>" width="28" height="28" alt=""></a><% } %>
+  <div class="msg-body">
+    <% if (m.post) { %>
+      <a class="msg-post" href="/p/<%= m.post.id %>" data-modal>
+        <span class="msg-post-head"><img class="avatar" src="<%= avatarOf(m.post.user) %>" width="24" height="24" alt=""><span class="username"><%= m.post.user.username %></span></span>
+        <span class="msg-post-media">
+          <% if (m.post.image) { %><img src="<%= m.post.image %>" alt="" class="f-<%= m.post.filter %>" loading="lazy"><% } else { %><span class="msg-post-video"><%- icon("reels", { size: 32 }) %></span><% } %>
+          <% if (m.post.kind === "reel") { %><span class="tile-kind"><%- icon("reels", { size: 18 }) %></span><% } %>
+        </span>
+        <% if (m.post.caption) { %><span class="msg-post-caption"><span class="username"><%= m.post.user.username %></span> <%= m.post.caption %></span><% } %>
+      </a>
+    <% } else if (!m.body) { %>
+      <p class="bubble gone">This post is unavailable.</p>
+    <% } %>
+    <% if (m.body) { %><p class="bubble"><%- rich(m.body) %></p><% } %>
+  </div>
+</div>

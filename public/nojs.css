@@ -1,0 +1,45 @@
+/* Loaded only when JavaScript is off: everything still works with plain links and forms. */
+.slide {
+  position: static;
+  opacity: 1;
+  height: auto;
+  margin-bottom: 8px;
+}
+.story {
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+  aspect-ratio: auto;
+  width: min(420px, 100vw);
+}
+.story-stage {
+  height: auto;
+  min-height: 100vh;
+  align-items: flex-start;
+  padding: 60px 0;
+  overflow: visible;
+}
+.story-zone,
+.story-arrow,
+.story-pause,
+.story-bars,
+.story::before {
+  display: none;
+}
+.story-head {
+  position: static;
+  padding: 12px;
+}
+.stage-preview {
+  display: none;
+}
+.caption.clamped {
+  display: block;
+}
+.more-link {
+  display: none;
+}
+.menu-list.menu-up {
+  bottom: auto;
+  top: auto;
+}

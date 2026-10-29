@@ -1,0 +1,42 @@
+<%- include("partials/top", { pageClass: "page-settings" }) %>
+<div class="narrow settings">
+  <h1 class="page-title">Edit profile</h1>
+  <% if (error) { %><p class="form-error banner" role="alert"><%= error %></p><% } %>
+  <form method="post" action="/accounts/edit" enctype="multipart/form-data" class="settings-form">
+    <div class="person settings-card">
+      <img class="avatar" src="<%= avatarOf(values) %>" width="56" height="56" alt="Your profile photo" data-avatar-preview>
+      <div class="who"><span class="username"><%= me.username %></span><span class="muted"><%= me.name %></span></div>
+      <label class="btn">Change photo<input type="file" name="media" accept="image/jpeg,image/png,image/gif,image/webp,image/avif" class="file-input" data-avatar-input></label>
+    </div>
+    <% if (values.avatar) { %>
+      <label class="check"><input type="checkbox" name="removePhoto" value="1"> Remove current photo</label>
+    <% } %>
+    <label class="field-label" for="name">Name</label>
+    <input class="input" id="name" name="name" value="<%= values.name %>" maxlength="<%= LIMITS.name %>" autocomplete="name">
+    <label class="field-label" for="bio">Bio</label>
+    <textarea class="input" id="bio" name="bio" rows="3" maxlength="<%= LIMITS.bio %>" data-count><%= values.bio %></textarea>
+    <p class="char-count muted"><span data-count-of="bio"><%= length(values.bio) %></span> / <%= LIMITS.bio %></p>
+    <button class="btn">Save changes</button>
+  </form>
+
+  <section class="settings-section">
+    <h2>Appearance</h2>
+    <form method="post" action="/appearance" class="choice-row">
+      <% for (const [value, label] of [["light", "Light"], ["dark", "Dark"], ["system", "Use device setting"]]) { %>
+        <button name="theme" value="<%= value %>" class="btn btn-secondary<%= theme === value ? ' on' : '' %>" aria-pressed="<%= theme === value %>"><%= label %></button>
+      <% } %>
+    </form>
+  </section>
+
+  <section class="settings-section">
+    <h2>Keyboard shortcuts</h2>
+    <p class="muted">Move through your feed, like, save and comment without a mouse.</p>
+    <button type="button" class="btn btn-secondary" data-open="shortcuts">Show shortcuts</button>
+  </section>
+
+  <section class="settings-section">
+    <h2>Account</h2>
+    <form method="post" action="/logout"><button class="btn btn-secondary">Log out</button></form>
+  </section>
+</div>
+<%- include("partials/bottom") %>

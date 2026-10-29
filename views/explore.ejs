@@ -1,0 +1,10 @@
+<%- include("partials/top", { pageClass: "page-explore" }) %>
+<div class="explore">
+  <form class="explore-search" action="/search" role="search">
+    <%- icon("search", { size: 16 }) %>
+    <input type="search" name="q" placeholder="Search" aria-label="Search people and hashtags" autocomplete="off">
+  </form>
+  <h1 class="sr">Explore</h1>
+  <%- include("partials/grid-items") %>
+</div>
+<%- include("partials/bottom") %>

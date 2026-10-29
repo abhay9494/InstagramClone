@@ -1,0 +1,50 @@
+<section class="reel" data-post="<%= post.id %>" aria-label="Reel by <%= post.user.username %>">
+  <div class="reel-stage">
+    <%- include("media", { post, aspect: "vertical", eager: true }) %>
+    <div class="reel-info">
+      <div class="reel-who">
+        <a href="/<%= post.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(post.user) %>" width="32" height="32" alt=""></a>
+        <a href="/<%= post.user.username %>" class="username"><%= post.user.username %></a>
+        <% if (me && me.id !== post.user.id && !post.following) { %>
+          <span aria-hidden="true">•</span>
+          <%- include("follow-button", { user: post.user, following: false, variant: "outline" }) %>
+        <% } %>
+      </div>
+      <% if (post.caption) { %><p class="reel-caption"><%- rich(post.caption) %></p><% } %>
+      <%- include("music-line", { post }) %>
+    </div>
+  </div>
+  <div class="reel-actions">
+    <div class="reel-act">
+      <form method="post" action="/p/<%= post.id %>/like<%= post.liked ? '?_method=DELETE' : '' %>" class="inline">
+        <button class="act like<%= post.liked ? ' on' : '' %>" data-like aria-pressed="<%= post.liked %>" aria-label="Like"><%- icon("heart") %><%- icon("heart-on") %></button>
+      </form>
+      <span data-like-number><%= compact(post.like_count) %></span>
+    </div>
+    <div class="reel-act">
+      <a class="act" href="/p/<%= post.id %>" data-modal aria-label="Comments"><%- icon("comment") %></a>
+      <span><%= compact(post.comment_count) %></span>
+    </div>
+    <% if (!me || me.id !== post.user.id) { %>
+      <div class="reel-act">
+        <form method="post" action="/p/<%= post.id %>/repost<%= post.reposted ? '?_method=DELETE' : '' %>" class="inline">
+          <button class="act repost<%= post.reposted ? ' on' : '' %>" data-repost aria-pressed="<%= post.reposted %>" aria-label="Repost"><%- icon("repost") %></button>
+        </form>
+        <span data-repost-number><%= compact(post.repost_count) %></span>
+      </div>
+    <% } %>
+    <div class="reel-act">
+      <a class="act" href="/p/<%= post.id %>/share" data-share-sheet="<%= post.id %>" aria-label="Share"><%- icon("share") %></a>
+    </div>
+    <div class="reel-act">
+      <form method="post" action="/p/<%= post.id %>/save<%= post.saved ? '?_method=DELETE' : '' %>" class="inline">
+        <button class="act save<%= post.saved ? ' on' : '' %>" data-save aria-pressed="<%= post.saved %>" aria-label="Save"><%- icon("save") %><%- icon("save-on") %></button>
+      </form>
+    </div>
+    <%- include("post-menu", { post }) %>
+    <% const track = trackOf(post.music); %>
+    <a class="reel-disc<%= track ? ` cover-${track.id}` : '' %>" href="<%= track ? `/audio/${track.id}` : `/${post.user.username}` %>" aria-label="<%= track ? `Music: ${track.title}` : 'Original audio' %>">
+      <% if (!track) { %><img src="<%= avatarOf(post.user) %>" alt=""><% } %>
+    </a>
+  </div>
+</section>

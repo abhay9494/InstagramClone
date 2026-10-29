@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="<%= theme %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title><%= title ? `${title} • Instagram` : "Instagram" %></title>
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/catalog.css">
+  <noscript><link rel="stylesheet" href="/nojs.css"></noscript>
+  <script src="/app.js" defer></script>
+</head>
+<body class="<%= locals.bodyClass || '' %>"<% if (flash) { %> data-flash="<%= flash %>"<% } %>>
+<a class="skip" href="#main">Skip to content</a>

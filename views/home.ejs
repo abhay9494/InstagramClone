@@ -1,0 +1,81 @@
+<%- include("partials/top", { pageClass: "page-home" }) %>
+<div class="home">
+  <section class="feed" aria-label="Feed">
+    <div class="tray-wrap">
+      <button class="tray-arrow back" type="button" data-tray="-1" aria-label="Earlier stories" hidden><%- icon("back", { size: 16 }) %></button>
+      <ul class="tray" aria-label="Stories" data-tray-list>
+        <% if (!tray.some((t) => t.user.id === me.id)) { %>
+          <li><a class="tray-item" href="/create?kind=story">
+            <span class="ring none"><img class="avatar" src="<%= avatarOf(me) %>" width="56" height="56" alt=""><span class="ring-plus" aria-hidden="true">+</span></span>
+            <span class="tray-name">Your story</span>
+          </a></li>
+        <% } %>
+        <% for (const t of tray) { %>
+          <li><a class="tray-item" href="/stories/<%= t.user.username %>">
+            <span class="ring<%= t.unseen ? '' : ' seen' %>"><img class="avatar" src="<%= avatarOf(t.user) %>" width="56" height="56" alt=""></span>
+            <span class="tray-name"><%= t.user.id === me.id ? "Your story" : t.user.username %></span>
+          </a></li>
+        <% } %>
+      </ul>
+      <button class="tray-arrow next" type="button" data-tray="1" aria-label="More stories" hidden><%- icon("next", { size: 16 }) %></button>
+    </div>
+
+    <nav class="feed-tabs" aria-label="Choose a feed">
+      <a href="/"<%- tab === 'following' ? ' class="on" aria-current="page"' : '' %>>Following</a>
+      <a href="/?tab=foryou"<%- tab === 'foryou' ? ' class="on" aria-current="page"' : '' %>>For you</a>
+    </nav>
+
+    <% if (!posts.length && first && tab === "following") { %>
+      <section class="welcome">
+        <span class="welcome-icon"><%- icon("user", { size: 40 }) %></span>
+        <h2>Welcome to Instagram</h2>
+        <p class="muted">When you follow people, you'll see the photos and stories they share here.</p>
+        <ul class="people-list">
+          <% for (const s of suggestions) { %>
+            <li class="person">
+              <a href="/<%= s.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(s) %>" width="44" height="44" alt=""></a>
+              <div class="who"><a class="username" href="/<%= s.username %>"><%= s.username %></a><span class="muted"><%= s.name %></span></div>
+              <%- include("partials/follow-button", { user: s, following: false, variant: "btn" }) %>
+            </li>
+          <% } %>
+        </ul>
+        <a class="btn" href="/explore">Explore posts</a>
+      </section>
+    <% } %>
+
+    <%- include("partials/feed-items") %>
+  </section>
+
+  <aside class="home-side" aria-label="Suggestions">
+    <div class="person side-me">
+      <a href="/<%= me.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(me) %>" width="44" height="44" alt=""></a>
+      <div class="who"><a class="username" href="/<%= me.username %>"><%= me.username %></a><span class="muted"><%= me.name %></span></div>
+      <form method="post" action="/logout" class="inline"><button class="link-btn">Switch</button></form>
+    </div>
+    <% if (suggestions.length) { %>
+      <div class="side-title"><span>Suggested for you</span><a href="/explore">See all</a></div>
+      <ul class="side-list">
+        <% for (const s of suggestions) { %>
+          <li class="person">
+            <a href="/<%= s.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(s) %>" width="44" height="44" alt=""></a>
+            <div class="who">
+              <a class="username" href="/<%= s.username %>"><%= s.username %></a>
+              <span class="muted small"><%= s.followed_by ? `Followed by ${s.followed_by}` : "Suggested for you" %></span>
+            </div>
+            <%- include("partials/follow-button", { user: s, following: false, variant: "link" }) %>
+          </li>
+        <% } %>
+      </ul>
+    <% } %>
+    <footer class="side-footer">
+      <p>
+        <a href="https://github.com/abhay9494/InstagramClone">About</a> ·
+        <a href="/explore">Explore</a> ·
+        <button type="button" class="plain" data-open="shortcuts">Keyboard shortcuts</button> ·
+        <a href="/accounts/edit">Settings</a>
+      </p>
+      <p>© 2026 Instagram clone · Express, EJS and MySQL · No ads, ever</p>
+    </footer>
+  </aside>
+</div>
+<%- include("partials/bottom") %>

@@ -1,0 +1,19 @@
+<% const chosen = trackOf(selected); %>
+<details class="music-picker"<%= chosen ? " open" : "" %>>
+  <summary><%- icon("music", { size: 18 }) %><span data-music-label><%= chosen ? `${chosen.title} · ${chosen.artist}` : "Add music" %></span></summary>
+  <div class="tracks" role="radiogroup" aria-label="Music">
+    <label class="track">
+      <input type="radio" name="music" value=""<%= chosen ? "" : " checked" %> data-title="Add music">
+      <span class="track-cover none"><%- icon("sound-off", { size: 18 }) %></span>
+      <span class="who"><span class="strong">No music</span></span>
+    </label>
+    <% for (const t of TRACKS) { %>
+      <label class="track">
+        <input type="radio" name="music" value="<%= t.id %>"<%= chosen?.id === t.id ? " checked" : "" %> data-title="<%= t.title %> · <%= t.artist %>">
+        <span class="track-cover cover-<%= t.id %>"><%- icon("music", { size: 18 }) %></span>
+        <span class="who"><span class="strong"><%= t.title %></span><span class="muted"><%= t.artist %> · 0:<%= t.seconds %></span></span>
+        <button type="button" class="act track-play" data-preview="<%= trackUrl(t) %>" aria-label="Play a preview of <%= t.title %>" hidden><%- icon("play", { size: 16 }) %><%- icon("pause", { size: 16 }) %></button>
+      </label>
+    <% } %>
+  </div>
+</details>

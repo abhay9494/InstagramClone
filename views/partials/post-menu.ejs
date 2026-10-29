@@ -1,0 +1,14 @@
+<details class="menu post-menu">
+  <summary class="act" aria-label="More options"><%- icon("more") %></summary>
+  <div class="menu-list">
+    <a href="/p/<%= post.id %>">Go to post</a>
+    <button type="button" data-copy="/p/<%= post.id %>">Copy link</button>
+    <a href="/<%= post.user.username %>">About this account</a>
+    <% if (me && me.id === post.user.id) { %>
+      <a href="/p/<%= post.id %>/edit">Edit</a>
+      <form method="post" action="/p/<%= post.id %>?_method=DELETE" data-confirm="Delete this post? It can't be brought back.">
+        <button class="danger">Delete</button>
+      </form>
+    <% } %>
+  </div>
+</details>

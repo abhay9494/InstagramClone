@@ -1,38 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
-    <title>Edit post — Instagram</title>
-</head>
-
-<body>
-    <header>
-        <img src="/logo.svg" alt="Insta Logo">
-        <h1 id="insta_name">Instagram</h1>
-    </header>
-    <main id="main_body">
-        <h2 id="edit_h1">Edit your Insta Post</h2>
-
-        <form class="post" method="post" action="/posts/<%=post.id%>?_method=PATCH" enctype="multipart/form-data">
-            <p>Post Username: <%=post.username%>
-            </p>
-            <p>Post Name: <%=post.name%>
-            </p>
-            <p>Image posted: <img src="<%=post.image%>" alt=""></p>
-
-            <input type="file" name="image" accept="image/*">
-            Comment:
-            <br><textarea contenteditable="true" rows="10" cols="30" name="comment"><%=post.comment%></textarea>
-            <!-- textarea ka "name" ko "content" kar diye taki backend ko pta chale ki ye "content" hai-->
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-        <p><a href="/posts/<%=post.id%>" class="back">‹ Back to the post</a></p>
-    </main>
-
-</body>
-
-</html>
+<%- include("partials/top", { pageClass: "page-create" }) %>
+<form class="composer" method="post" action="/p/<%= post.id %>?_method=PATCH" data-composer data-kind="<%= post.kind === 'reel' ? 'reel' : 'post' %>">
+  <header class="composer-head">
+    <a href="/p/<%= post.id %>" class="act" aria-label="Cancel"><%- icon("back") %></a>
+    <h1>Edit info</h1>
+    <button class="link-btn">Done</button>
+  </header>
+  <% if (error) { %><p class="form-error banner" role="alert"><%= error %></p><% } %>
+  <div class="composer-body">
+    <div class="stage has-photo">
+      <span class="stage-preview media ar-<%= post.aspect %>" data-preview>
+        <% if (post.kind === "reel") { %>
+          <video src="<%= post.video %>"<% if (post.image) { %> poster="<%= post.image %>"<% } %> class="f-<%= post.filter %>" muted loop playsinline autoplay data-preview-video></video>
+          <img alt="" hidden data-preview-img>
+        <% } else { %>
+          <img src="<%= post.image %>" alt="<%= altOf(post) %>" class="f-<%= post.filter %>" data-preview-img>
+        <% } %>
+      </span>
+    </div>
+    <div class="composer-side">
+      <div class="person">
+        <img class="avatar" src="<%= avatarOf(me) %>" width="28" height="28" alt="">
+        <span class="username"><%= me.username %></span>
+      </div>
+      <label class="sr" for="caption">Caption</label>
+      <textarea id="caption" name="caption" rows="4" maxlength="<%= LIMITS.caption %>" placeholder="Write a caption…" data-count><%= post.caption %></textarea>
+      <p class="char-count muted"><span data-count-of="caption"><%= length(post.caption) %></span>/<%= count(LIMITS.caption) %></p>
+      <%- include("partials/music-picker", { selected: post.music }) %>
+      <% if (post.kind !== "reel") { %>
+        <h2 class="side-h">Shape</h2>
+        <fieldset class="segmented" data-aspects>
+          <legend class="sr">Shape</legend>
+          <% for (const a of ASPECTS) { %>
+            <label><input type="radio" name="aspect" value="<%= a.id %>"<%= post.aspect === a.id ? " checked" : "" %>><span><%= a.name %></span></label>
+          <% } %>
+        </fieldset>
+      <% } %>
+      <h2 class="side-h">Filter</h2>
+      <%- include("partials/filter-picker", { selected: post.filter, image: post.image }) %>
+      <h2 class="side-h"><label for="alt">Alt text</label></h2>
+      <input id="alt" name="alt" class="input" maxlength="<%= LIMITS.alt %>" value="<%= post.alt %>" placeholder="Describe your photo or video">
+      <p class="hint muted">Alt text describes your post for people who use screen readers.</p>
+      <button class="btn btn-block">Save changes</button>
+    </div>
+  </div>
+</form>
+<%- include("partials/bottom") %>

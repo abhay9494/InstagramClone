@@ -1,0 +1,21 @@
+<%- include("partials/head", { bodyClass: "auth-page" }) %>
+<main id="main" class="auth">
+  <div class="auth-col">
+    <div class="auth-box">
+      <h1 class="wordmark auth-logo">Instagram</h1>
+      <p class="auth-lede muted">Sign up to see photos and stories from your friends.</p>
+      <form method="post" action="/signup" class="auth-form" novalidate>
+        <label class="float<%= errors.name ? ' invalid' : '' %>"><input name="name" value="<%= values.name || '' %>" placeholder=" " maxlength="<%= LIMITS.name %>" autocomplete="name"><span>Full name</span></label>
+        <% if (errors.name) { %><p class="field-error"><%= errors.name %></p><% } %>
+        <label class="float<%= errors.username ? ' invalid' : '' %>"><input name="username" value="<%= values.username || '' %>" placeholder=" " required maxlength="30" autocomplete="username" autocapitalize="none" spellcheck="false"><span>Username</span></label>
+        <% if (errors.username) { %><p class="field-error"><%= errors.username %></p><% } %>
+        <label class="float<%= errors.password ? ' invalid' : '' %>"><input type="password" name="password" placeholder=" " required minlength="<%= LIMITS.password %>" autocomplete="new-password"><span>Password</span><button type="button" class="show-password" data-show-password hidden>Show</button></label>
+        <% if (errors.password) { %><p class="field-error"><%= errors.password %></p><% } %>
+        <p class="auth-fine muted">Passwords are stored as salted scrypt hashes. Nobody, including the people who run this site, can read yours.</p>
+        <button class="btn btn-block">Sign up</button>
+      </form>
+    </div>
+    <div class="auth-box alt">Have an account? <a href="/login" class="strong-link">Log in</a></div>
+  </div>
+</main>
+<%- include("partials/end") %>

@@ -1,0 +1,36 @@
+<%- include("partials/top", { pageClass: "page-activity" }) %>
+<div class="narrow">
+  <h1 class="page-title">Notifications</h1>
+  <% if (!groups.length) { %>
+    <div class="empty">
+      <span class="empty-icon"><%- icon("heart", { size: 40 }) %></span>
+      <h2>Activity on your posts</h2>
+      <p class="muted">When someone likes or comments on one of your posts, or follows you, you'll see it here.</p>
+    </div>
+  <% } %>
+  <% for (const group of groups) { %>
+    <section class="notes">
+      <h2><%= group.label %></h2>
+      <ul>
+        <% for (const it of group.items) { %>
+          <li class="person note">
+            <a href="/<%= it.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(it.user) %>" width="44" height="44" alt=""></a>
+            <p class="who note-text">
+              <span>
+                <a class="username" href="/<%= it.user.username %>"><%= it.user.username %></a><% if (it.also?.length === 1) { %> and <a class="username" href="/<%= it.also[0].username %>"><%= it.also[0].username %></a><% } else if (it.also?.length > 1) { %>, <a class="username" href="/<%= it.also[0].username %>"><%= it.also[0].username %></a> and <%= plural(it.also.length - 1, "other") %><% } %>
+                <% if (it.type === "like") { %>liked your post.<% } else if (it.type === "repost") { %>reposted your post.<% } else if (it.type === "comment") { %>commented: <%- rich(it.body) %><% } else { %>started following you.<% } %>
+                <time class="muted" datetime="<%= it.created_at.toISOString() %>"><%= ago(it.created_at) %></time>
+              </span>
+            </p>
+            <% if (it.post) { %>
+              <a href="/p/<%= it.post.id %>" class="note-thumb" data-modal aria-label="Open the post"><img src="<%= it.post.image %>" alt="" class="f-<%= it.post.filter %>" width="44" height="44" loading="lazy"></a>
+            <% } else { %>
+              <%- include("partials/follow-button", { user: it.user, following: it.following, variant: "btn", followBack: true }) %>
+            <% } %>
+          </li>
+        <% } %>
+      </ul>
+    </section>
+  <% } %>
+</div>
+<%- include("partials/bottom") %>

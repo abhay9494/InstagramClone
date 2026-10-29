@@ -1,0 +1,36 @@
+<%- include("partials/top", { pageClass: "page-direct" }) %>
+<div class="direct<%= other ? ' has-thread' : '' %>">
+  <aside class="inbox" aria-label="Conversations">
+    <header class="inbox-head">
+      <h1><%= me.username %></h1>
+      <a href="/direct/new" class="act" aria-label="New message"><%- icon("edit") %></a>
+    </header>
+    <h2 class="inbox-title">Messages</h2>
+    <% if (!chats.length) { %><p class="muted inbox-empty">No messages yet. Start a chat with someone you follow.</p><% } %>
+    <ul class="chats" data-chats>
+      <% for (const c of chats) { %>
+        <li>
+          <a class="chat<%= other && other.id === c.user.id ? ' on' : '' %><%= c.unread && !(other && other.id === c.user.id) ? ' unread' : '' %>" href="/direct/t/<%= c.user.username %>" data-chat="<%= c.user.username %>">
+            <img class="avatar" src="<%= avatarOf(c.user) %>" width="56" height="56" alt="">
+            <span class="who">
+              <span class="chat-name"><%= c.user.name || c.user.username %></span>
+              <span class="chat-last muted"><span data-chat-preview><%= c.last.mine ? "You: " : "" %><%= c.last.body || "Sent a post" %></span> · <%= ago(c.last.created_at) %></span>
+            </span>
+            <span class="unread-dot" aria-label="Unread"></span>
+          </a>
+        </li>
+      <% } %>
+    </ul>
+  </aside>
+  <% if (other) { %>
+    <%- include("partials/thread") %>
+  <% } else { %>
+    <section class="thread-empty">
+      <span class="empty-icon big"><%- icon("direct", { size: 52 }) %></span>
+      <h2>Your messages</h2>
+      <p class="muted">Send a message or share a post with a friend.</p>
+      <a class="btn" href="/direct/new">Send message</a>
+    </section>
+  <% } %>
+</div>
+<%- include("partials/bottom") %>

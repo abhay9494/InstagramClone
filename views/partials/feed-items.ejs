@@ -1,0 +1,17 @@
+<div class="posts" data-items>
+  <% for (const post of posts) { %><%- include("post-card", { post }) %><% } %>
+</div>
+<% if (nextUrl) { %>
+  <a class="load-more" href="<%= nextUrl %>" data-next>Load more posts</a>
+<% } else if (posts.length || !first) { %>
+  <div class="caught-up">
+    <span class="caught-up-icon"><%- icon("check", { size: 36 }) %></span>
+    <h2>You're all caught up</h2>
+    <% if (tab === "following") { %>
+      <p class="muted">You've seen every post from the accounts you follow.</p>
+      <a href="/?tab=foryou" class="strong-link">View suggested posts</a>
+    <% } else { %>
+      <p class="muted">You've seen every suggested post.</p>
+    <% } %>
+  </div>
+<% } %>

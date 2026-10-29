@@ -1,0 +1,6 @@
+<% const track = trackOf(post.music); %>
+<% if (track) { %>
+  <a href="/audio/<%= track.id %>" class="music-line"><%- icon("music", { size: 11 }) %><span><%= track.artist %> · <%= track.title %></span></a>
+<% } else if (post.kind === "reel") { %>
+  <span class="music-line"><%- icon("music", { size: 11 }) %><span><%= post.user.username %> · Original audio</span></span>
+<% } %>

@@ -1,0 +1,19 @@
+<div class="actions">
+  <form method="post" action="/p/<%= post.id %>/like<%= post.liked ? '?_method=DELETE' : '' %>" class="inline">
+    <button class="act like<%= post.liked ? ' on' : '' %>" data-like aria-pressed="<%= post.liked %>" aria-label="Like">
+      <%- icon("heart") %><%- icon("heart-on") %>
+    </button>
+  </form>
+  <a class="act" href="/p/<%= post.id %>" data-comment-link aria-label="Comment"><%- icon("comment") %></a>
+  <% if (!me || me.id !== post.user.id) { %>
+    <form method="post" action="/p/<%= post.id %>/repost<%= post.reposted ? '?_method=DELETE' : '' %>" class="inline">
+      <button class="act repost<%= post.reposted ? ' on' : '' %>" data-repost aria-pressed="<%= post.reposted %>" aria-label="Repost"><%- icon("repost") %></button>
+    </form>
+  <% } %>
+  <a class="act" href="/p/<%= post.id %>/share" data-share-sheet="<%= post.id %>" aria-label="Share"><%- icon("share") %></a>
+  <form method="post" action="/p/<%= post.id %>/save<%= post.saved ? '?_method=DELETE' : '' %>" class="inline push">
+    <button class="act save<%= post.saved ? ' on' : '' %>" data-save aria-pressed="<%= post.saved %>" aria-label="Save">
+      <%- icon("save") %><%- icon("save-on") %>
+    </button>
+  </form>
+</div>

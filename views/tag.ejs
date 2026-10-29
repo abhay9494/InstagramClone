@@ -1,0 +1,13 @@
+<%- include("partials/top", { pageClass: "page-tag" }) %>
+<div class="explore">
+  <header class="tag-head">
+    <span class="tag-photo"><% if (posts[0]) { %><img src="<%= posts[0].image %>" alt="" class="f-<%= posts[0].filter %>"><% } %></span>
+    <div>
+      <h1>#<%= tag %></h1>
+      <p><span class="strong"><%= count(total) %></span> <%= total === 1 ? "post" : "posts" %></p>
+    </div>
+  </header>
+  <h2 class="grid-title muted">Top posts</h2>
+  <%- include("partials/grid-items") %>
+</div>
+<%- include("partials/bottom") %>

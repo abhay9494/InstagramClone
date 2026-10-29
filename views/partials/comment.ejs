@@ -1,0 +1,14 @@
+<div class="comment" data-comment="<%= comment.id %>">
+  <a href="/<%= comment.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(comment.user) %>" width="32" height="32" alt=""></a>
+  <div class="comment-body">
+    <p><a class="username" href="/<%= comment.user.username %>"><%= comment.user.username %></a> <%- rich(comment.body) %></p>
+    <div class="comment-meta muted">
+      <time datetime="<%= comment.created_at.toISOString() %>" title="<%= fullDate(comment.created_at) %>"><%= ago(comment.created_at) %></time>
+      <% if (me && (me.id === comment.user.id || me.id === post.user.id)) { %>
+        <form method="post" action="/comments/<%= comment.id %>?_method=DELETE" class="inline" data-delete-comment>
+          <button class="link-btn muted">Delete</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<div class="grid grid-<%= layout %>" data-items>
+  <% for (const post of posts) { %><%- include("tile", { post }) %><% } %>
+</div>
+<% if (nextUrl) { %><a class="load-more" href="<%= nextUrl %>" data-next>Load more</a><% } %>

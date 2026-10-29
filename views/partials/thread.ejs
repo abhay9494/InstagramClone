@@ -1,0 +1,27 @@
+<section class="thread" data-thread="<%= other.username %>" aria-label="Chat with <%= other.username %>">
+  <header class="thread-head">
+    <a href="/direct/inbox" class="act thread-back" aria-label="Back to messages"><%- icon("back") %></a>
+    <a href="/<%= other.username %>" class="person">
+      <img class="avatar" src="<%= avatarOf(other) %>" width="44" height="44" alt="">
+      <span class="who"><span class="strong"><%= other.name || other.username %></span><span class="muted small"><%= other.username %></span></span>
+    </a>
+  </header>
+  <div class="thread-body" data-thread-body>
+    <div class="thread-intro">
+      <img class="avatar" src="<%= avatarOf(other) %>" width="96" height="96" alt="">
+      <h2><%= other.name || other.username %></h2>
+      <p class="muted"><%= other.username %> · Instagram</p>
+      <a href="/<%= other.username %>" class="btn btn-secondary">View profile</a>
+    </div>
+    <% messages.forEach((m, i) => { const prev = messages[i - 1]; %>
+      <% if (!prev || m.created_at - prev.created_at > 3_600_000) { %><p class="msg-time muted"><%= clock(m.created_at) %></p><% } %>
+      <%- include("message", { m }) %>
+    <% }) %>
+    <% const last = messages.at(-1); %>
+    <p class="seen muted" data-seen<%= last && last.mine && last.read_at ? '' : ' hidden' %>>Seen</p>
+  </div>
+  <form class="message-bar" method="post" action="/direct/t/<%= other.username %>" data-message-form>
+    <input name="body" placeholder="Message…" aria-label="Message" maxlength="2200" autocomplete="off" required>
+    <button class="link-btn">Send</button>
+  </form>
+</section>

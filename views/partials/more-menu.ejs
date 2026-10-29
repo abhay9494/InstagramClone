@@ -1,0 +1,14 @@
+<details class="menu more-menu">
+  <summary class="nav-link"><%- icon("menu") %><span>More</span></summary>
+  <div class="menu-list menu-up">
+    <a href="/accounts/edit"><%- icon("settings") %>Settings</a>
+    <a href="/<%= me.username %>/saved"><%- icon("save") %>Saved</a>
+    <form method="post" action="/appearance" data-theme-toggle>
+      <input type="hidden" name="theme" value="<%= theme === 'dark' ? 'light' : 'dark' %>">
+      <button><%- icon("moon") %>Switch appearance</button>
+    </form>
+    <button type="button" data-open="shortcuts"><%- icon("keyboard") %>Keyboard shortcuts</button>
+    <hr>
+    <form method="post" action="/logout"><button><%- icon("logout") %>Log out</button></form>
+  </div>
+</details>

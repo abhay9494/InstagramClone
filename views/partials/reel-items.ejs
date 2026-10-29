@@ -1,0 +1,12 @@
+<div class="reel-list" data-items>
+  <% for (const post of reels) { %><%- include("reel", { post }) %><% } %>
+</div>
+<% if (nextUrl) { %>
+  <a class="load-more" href="<%= nextUrl %>" data-next>More reels</a>
+<% } else if (reels.length) { %>
+  <div class="caught-up reels-end">
+    <span class="caught-up-icon"><%- icon("check", { size: 36 }) %></span>
+    <h2>You're all caught up</h2>
+    <p class="muted">You've watched every reel. <a href="/create?kind=reel" class="strong-link">Make one</a></p>
+  </div>
+<% } %>

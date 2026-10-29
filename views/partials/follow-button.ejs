@@ -1,0 +1,4 @@
+<% const style = variant === "link" ? "link-btn" : variant === "outline" ? "btn-outline" : following ? "btn btn-secondary" : "btn"; %>
+<form method="post" action="/<%= user.username %>/follow<%= following ? '?_method=DELETE' : '' %>" class="inline">
+  <button class="<%= style %><%= following ? ' on' : '' %>" data-follow="<%= user.username %>" data-variant="<%= variant %>" aria-pressed="<%= following %>"><%= following ? "Following" : locals.followBack ? "Follow back" : "Follow" %></button>
+</form>

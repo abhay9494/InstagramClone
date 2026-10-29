@@ -1,0 +1,63 @@
+<%- include("partials/top", { pageClass: "page-create" }) %>
+<form class="composer" method="post" action="/p" enctype="multipart/form-data" data-composer data-kind="<%= values.kind %>">
+  <header class="composer-head">
+    <a href="/" class="act" aria-label="Cancel"><%- icon("back") %></a>
+    <h1>Create new <span data-kind-label><%= values.kind %></span></h1>
+    <button class="link-btn">Share</button>
+  </header>
+  <% if (error) { %><p class="form-error banner" role="alert"><%= error %></p><% } %>
+  <div class="composer-body">
+    <label class="stage" data-drop>
+      <span class="stage-empty">
+        <%- icon("image", { size: 96 }) %>
+        <span class="stage-title" data-stage-title><%= values.kind === "reel" ? "Drag a video here" : values.kind === "story" ? "Drag a photo here" : "Drag photos and videos here" %></span>
+        <span class="btn">Select from computer</span>
+      </span>
+      <input type="file" name="media" accept="image/jpeg,image/png,image/gif,image/webp,image/avif,video/mp4,video/webm,video/quicktime" required class="file-input" data-file aria-label="Photo or video">
+      <input type="file" name="poster" accept="image/jpeg" class="file-input" tabindex="-1" aria-hidden="true" data-poster>
+      <span class="stage-preview media ar-<%= values.aspect %>" data-preview hidden>
+        <img alt="Preview of your photo" class="f-<%= values.filter %>" data-preview-img>
+        <video class="f-<%= values.filter %>" muted loop playsinline data-preview-video hidden></video>
+      </span>
+    </label>
+    <div class="composer-side">
+      <fieldset class="segmented" data-kinds>
+        <legend class="sr">Share as</legend>
+        <% for (const [k, label] of [["post", "Post"], ["reel", "Reel"], ["story", "Story"]]) { %>
+          <label><input type="radio" name="kind" value="<%= k %>"<%= values.kind === k ? " checked" : "" %>><span><%= label %></span></label>
+        <% } %>
+      </fieldset>
+      <div class="person">
+        <img class="avatar" src="<%= avatarOf(me) %>" width="28" height="28" alt="">
+        <span class="username"><%= me.username %></span>
+      </div>
+      <div class="not-story">
+        <label class="sr" for="caption">Caption</label>
+        <textarea id="caption" name="caption" rows="4" maxlength="<%= LIMITS.caption %>" placeholder="Write a caption… use #hashtags and @mentions" data-count><%= values.caption %></textarea>
+        <p class="char-count muted"><span data-count-of="caption"><%= length(values.caption) %></span>/<%= count(LIMITS.caption) %></p>
+      </div>
+      <%- include("partials/music-picker", { selected: values.music }) %>
+      <div class="photo-only">
+        <h2 class="side-h">Shape</h2>
+        <fieldset class="segmented" data-aspects>
+          <legend class="sr">Shape</legend>
+          <% for (const a of ASPECTS) { %>
+            <label><input type="radio" name="aspect" value="<%= a.id %>"<%= values.aspect === a.id ? " checked" : "" %>><span><%= a.name %></span></label>
+          <% } %>
+        </fieldset>
+      </div>
+      <div class="not-story">
+        <h2 class="side-h">Filter</h2>
+        <%- include("partials/filter-picker", { selected: values.filter, image: "" }) %>
+        <p class="hint muted">You can change the filter, shape and music later. Your original is kept.</p>
+        <h2 class="side-h"><label for="alt">Alt text</label></h2>
+        <input id="alt" name="alt" class="input" maxlength="<%= LIMITS.alt %>" value="<%= values.alt %>" placeholder="Describe your photo or video">
+        <p class="hint muted">Alt text describes your post for people who use screen readers.</p>
+      </div>
+      <p class="story-only muted">Your story is shown to your followers for 24 hours, at the top of their feed.</p>
+      <p class="reel-only muted">Reels are vertical videos up to 50 MB. They play in Reels, on your profile and in your followers' feeds.</p>
+      <button class="btn btn-block">Share</button>
+    </div>
+  </div>
+</form>
+<%- include("partials/bottom") %>

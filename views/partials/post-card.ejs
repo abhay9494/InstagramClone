@@ -1,0 +1,35 @@
+<article class="post" data-post="<%= post.id %>">
+  <% if (post.reposted_by) { %>
+    <p class="reposted muted"><%- icon("repost", { size: 14 }) %><a href="/<%= post.reposted_by %>" class="username"><%= post.reposted_by %></a> reposted</p>
+  <% } %>
+  <header class="post-head">
+    <a href="/<%= post.user.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(post.user) %>" width="32" height="32" alt=""></a>
+    <div class="who">
+      <div class="who-line">
+        <a href="/<%= post.user.username %>" class="username"><%= post.user.username %></a>
+        <span class="muted" aria-hidden="true">•</span>
+        <a href="/p/<%= post.id %>" class="muted" data-modal><time datetime="<%= post.created_at.toISOString() %>" title="<%= fullDate(post.created_at) %>"><%= ago(post.created_at) %></time></a>
+      </div>
+      <%- include("music-line", { post }) %>
+    </div>
+    <%- include("post-menu", { post }) %>
+  </header>
+  <%- include("media", { post, aspect: post.kind === "reel" ? "portrait" : post.aspect }) %>
+  <%- include("actions", { post }) %>
+  <p class="likes">
+    <% if (post.liked_by && post.like_count > 1) { %>
+      Liked by <a href="/<%= post.liked_by %>" class="username"><%= post.liked_by %></a> and <a href="/p/<%= post.id %>" class="strong" data-modal>others</a>
+    <% } else { %>
+      <a href="/p/<%= post.id %>" class="strong" data-modal data-like-count><%= plural(post.like_count, "like") %></a>
+    <% } %>
+  </p>
+  <% if (post.caption) { const long = length(post.caption) > 125; %>
+    <p class="caption<%= long ? ' clamped' : '' %>" data-caption><a href="/<%= post.user.username %>" class="username"><%= post.user.username %></a> <%- rich(post.caption) %></p>
+    <% if (long) { %><a href="/p/<%= post.id %>" class="more-link muted" data-more>more</a><% } %>
+  <% } %>
+  <% if (post.comment_count) { %>
+    <a href="/p/<%= post.id %>" class="view-comments muted" data-modal data-comment-total="<%= post.comment_count %>"><%= post.comment_count === 1 ? "View 1 comment" : `View all ${count(post.comment_count)} comments` %></a>
+  <% } %>
+  <div class="mini-comments" data-new-comments></div>
+  <% if (me) { %><%- include("comment-form", { post }) %><% } %>
+</article>

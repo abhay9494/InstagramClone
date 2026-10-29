@@ -1,0 +1,27 @@
+<%- include("partials/top", { pageClass: "page-people" }) %>
+<div class="narrow">
+  <header class="people-head">
+    <a href="/<%= user.username %>" class="act" aria-label="Back to <%= user.username %>"><%- icon("back") %></a>
+    <h1><%= which === "followers" ? "Followers" : "Following" %></h1>
+  </header>
+  <nav class="tabs people-tabs" aria-label="Followers and following">
+    <a href="/<%= user.username %>/followers" class="tab<%= which === 'followers' ? ' on' : '' %>">Followers</a>
+    <a href="/<%= user.username %>/following" class="tab<%= which === 'following' ? ' on' : '' %>">Following</a>
+  </nav>
+  <% if (!list.length) { %>
+    <div class="empty">
+      <span class="empty-icon"><%- icon("user", { size: 40 }) %></span>
+      <h2><%= which === "followers" ? "No followers yet" : "Not following anyone yet" %></h2>
+    </div>
+  <% } %>
+  <ul class="people-list">
+    <% for (const u of list) { %>
+      <li class="person">
+        <a href="/<%= u.username %>" tabindex="-1" aria-hidden="true"><img class="avatar" src="<%= avatarOf(u) %>" width="44" height="44" alt="" loading="lazy"></a>
+        <div class="who"><a class="username" href="/<%= u.username %>"><%= u.username %></a><span class="muted"><%= u.name %></span></div>
+        <% if (me && me.id !== u.id) { %><%- include("partials/follow-button", { user: u, following: u.following, variant: "btn" }) %><% } %>
+      </li>
+    <% } %>
+  </ul>
+</div>
+<%- include("partials/bottom") %>

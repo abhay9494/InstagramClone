@@ -1,0 +1,13 @@
+<%# A post's photo, or a reel's video, with the double-tap heart and (for music and video) a sound button. %>
+<% const track = trackOf(post.music); const reel = post.kind === "reel"; %>
+<div class="media ar-<%= aspect %>" data-like-target data-media<%- track ? ` data-music="${trackUrl(track)}"` : "" %><%- reel ? " data-reel" : "" %>>
+  <% if (reel) { %>
+    <video src="<%= post.video %>"<% if (post.image) { %> poster="<%= post.image %>"<% } %> class="f-<%= post.filter %>" muted loop playsinline controls preload="<%= post.image ? 'none' : 'metadata' %>" aria-label="<%= altOf(post) %>"></video>
+  <% } else { %>
+    <img src="<%= post.image %>" alt="<%= altOf(post) %>" class="f-<%= post.filter %>"<%- locals.eager ? "" : ' loading="lazy"' %> decoding="async" width="1080" height="1080">
+  <% } %>
+  <% if (track || reel) { %>
+    <button class="sound" type="button" data-sound aria-label="Turn sound on" hidden><%- icon("sound-off", { size: 14 }) %><%- icon("sound-on", { size: 14 }) %></button>
+  <% } %>
+  <span class="burst" aria-hidden="true"><%- icon("heart-on", { size: 96 }) %></span>
+</div>

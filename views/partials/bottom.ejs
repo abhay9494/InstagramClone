@@ -1,0 +1,45 @@
+</main>
+<% if (me) { %>
+<nav class="tabbar" aria-label="Main">
+  <a href="/" aria-label="Home"<%- active === 'home' ? ' aria-current="page"' : '' %>><%- icon(active === "home" ? "home-on" : "home") %></a>
+  <a href="/explore" aria-label="Explore"<%- active === 'explore' || active === 'search' ? ' aria-current="page"' : '' %>><%- icon(active === "explore" ? "explore-on" : "explore") %></a>
+  <a href="/create" aria-label="Create"<%- active === 'create' ? ' aria-current="page"' : '' %>><%- icon(active === "create" ? "create-on" : "create") %></a>
+  <a href="/reels" aria-label="Reels"<%- active === 'reels' ? ' aria-current="page"' : '' %>><%- icon(active === "reels" ? "reels-on" : "reels") %></a>
+  <a href="/<%= me.username %>" aria-label="Profile"<%- active === 'profile' ? ' aria-current="page"' : '' %>><img class="avatar nav-avatar" src="<%= avatarOf(me) %>" width="24" height="24" alt=""></a>
+</nav>
+<aside class="search-panel" id="search-panel" aria-label="Search" hidden>
+  <h2>Search</h2>
+  <form action="/search" role="search" data-live-search>
+    <input type="search" name="q" placeholder="Search" aria-label="Search people and hashtags" autocomplete="off">
+  </form>
+  <div class="search-results" data-search-results>
+    <p class="muted center">Search for people or #hashtags.</p>
+  </div>
+</aside>
+<% } %>
+<dialog class="post-modal" id="post-modal" aria-label="Post">
+  <button class="modal-close" type="button" data-close aria-label="Close"><%- icon("close", { size: 28 }) %></button>
+  <div class="post-modal-body" data-modal-body></div>
+</dialog>
+<dialog class="sheet share-dialog" id="share-sheet" aria-label="Share">
+  <div data-share-body></div>
+</dialog>
+<dialog class="sheet" id="shortcuts" aria-labelledby="shortcuts-title">
+  <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+  <dl class="keys">
+    <div><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Next and previous post or reel</dd></div>
+    <div><dt><kbd>l</kbd></dt><dd>Like or unlike</dd></div>
+    <div><dt><kbd>s</kbd></dt><dd>Save or unsave</dd></div>
+    <div><dt><kbd>r</kbd></dt><dd>Repost or undo repost</dd></div>
+    <div><dt><kbd>c</kbd></dt><dd>Write a comment</dd></div>
+    <div><dt><kbd>o</kbd></dt><dd>Open the post</dd></div>
+    <div><dt><kbd>m</kbd></dt><dd>Sound on or off</dd></div>
+    <div><dt><kbd>/</kbd></dt><dd>Search</dd></div>
+    <div><dt><kbd>n</kbd></dt><dd>New post</dd></div>
+    <div><dt><kbd>g</kbd> then <kbd>h</kbd> <kbd>e</kbd> <kbd>r</kbd> <kbd>d</kbd> <kbd>a</kbd> <kbd>p</kbd></dt><dd>Go to home, explore, reels, messages, notifications, profile</dd></div>
+    <div><dt><kbd>t</kbd></dt><dd>Switch light and dark</dd></div>
+    <div><dt><kbd>?</kbd></dt><dd>Show these shortcuts</dd></div>
+  </dl>
+  <form method="dialog"><button class="btn btn-block">Done</button></form>
+</dialog>
+<%- include('end') %>

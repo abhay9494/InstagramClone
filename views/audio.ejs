@@ -1,0 +1,17 @@
+<%- include("partials/top", { pageClass: "page-audio" }) %>
+<div class="explore">
+  <header class="tag-head audio-head">
+    <span class="tag-photo audio-cover cover-<%= track.id %>"><%- icon("music", { size: 56 }) %></span>
+    <div>
+      <h1><%= track.title %></h1>
+      <p class="muted"><%= track.artist %> · <%= plural(total, "post") %></p>
+      <div class="audio-actions">
+        <button class="btn btn-secondary" type="button" data-preview="<%= trackUrl(track) %>" hidden><%- icon("play", { size: 16 }) %><%- icon("pause", { size: 16 }) %>Play</button>
+        <a class="btn" href="/create?music=<%= track.id %>"><%- icon("reels", { size: 16 }) %>Use audio</a>
+      </div>
+    </div>
+  </header>
+  <% if (!posts.length) { %><p class="muted center">No posts use this audio yet. Be the first.</p><% } %>
+  <%- include("partials/grid-items") %>
+</div>
+<%- include("partials/bottom") %>

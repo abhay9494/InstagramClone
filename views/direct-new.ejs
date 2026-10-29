@@ -1,0 +1,23 @@
+<%- include("partials/top", { pageClass: "page-direct-new" }) %>
+<div class="narrow">
+  <header class="people-head">
+    <a href="/direct/inbox" class="act" aria-label="Back to messages"><%- icon("back") %></a>
+    <h1>New message</h1>
+  </header>
+  <form action="/direct/new" class="search-form" role="search">
+    <input type="search" name="q" value="<%= q %>" placeholder="Search" aria-label="Search people" autocomplete="off" autofocus>
+  </form>
+  <h2 class="grid-title muted"><%= q ? "Results" : "Suggested" %></h2>
+  <ul class="people-list">
+    <% for (const u of users) { %>
+      <li>
+        <a class="person result" href="/direct/t/<%= u.username %>">
+          <img class="avatar" src="<%= avatarOf(u) %>" width="44" height="44" alt="">
+          <span class="who"><span class="username"><%= u.username %></span><span class="muted"><%= u.name %></span></span>
+        </a>
+      </li>
+    <% } %>
+  </ul>
+  <% if (!users.length) { %><p class="muted center"><%= q ? `No accounts found for “${q}”.` : "Follow people to message them here." %></p><% } %>
+</div>
+<%- include("partials/bottom") %>
